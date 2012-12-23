@@ -7,13 +7,12 @@
 //
 
 #include <stdio.h>
+#include <time.h>
 #include "../shared.h"
 
 int main(int argc, const char * argv[])
 {
-
-    // insert code here...
-    printf("Hello, World!\n");
+    timezone
     return 0;
 }
 

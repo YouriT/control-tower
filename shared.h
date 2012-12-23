@@ -12,10 +12,11 @@
 #define SHARED_FILE_PATH "/Users/Youri/Xcode/control-tower/"
 #define FIFO_IN_NAME "fifo-in"
 #define ATIS_NAME "atis-1"
+#define MAX_BUF 1024
 
 typedef struct {
     int size;
-    char content[1000];
+    char content[MAX_BUF];
     int lastUp;
 } atis;
 
