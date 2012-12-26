@@ -14,10 +14,25 @@
 #define ATIS_NAME "atis-1"
 #define MAX_BUF 1024
 
+#define HEADER_HI 1
+#define HEADER_ATIS 2
+
 typedef struct {
     int size;
     char content[MAX_BUF];
     int lastUp;
 } atis;
+
+typedef struct {
+    int header;
+    size_t size;
+    char * message;
+} com_mess;
+
+int file_exists(const char * path);
+
+com_mess * encode_message(int header, const char * message);
+com_mess * read_message(FILE * fd);
+void send_message(com_mess * com, FILE * fd);
 
 #endif
