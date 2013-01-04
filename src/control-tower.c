@@ -23,7 +23,7 @@ int main(int argc, const char * argv[])
     while (file_exists(SHARED_FILE_PATH
                        ATIS_NAME
                        ".lock")) {
-        usleep(100);
+	sleep(1);
     }
     
     // Let's load atis file content in memory
