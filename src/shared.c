@@ -28,7 +28,7 @@ void send_message(com_mess * com, FILE * fd)
     printf("--------------------------------------------\nHeader : %d\n",com->header);
     
     com->size = strlen(com->message);
-    printf("Length : %ld\n",com->size);
+    printf("Length : %zu\n",com->size);
     
     fwrite(&com->size, sizeof(size_t), 1, fd);
     fwrite(com->message, sizeof(char), strlen(com->message), fd);
@@ -52,7 +52,7 @@ com_mess * read_message(FILE * fd)
     printf("--------------------------------------------\nHeader : %d\n",ret->header);
     
     fread(&ret->size, sizeof(size_t), 1, fd);
-    printf("Length : %ld\n",ret->size);
+    printf("Length : %zu\n",ret->size);
     
     ret->message = malloc(sizeof(char)*ret->size);
     fread(ret->message, sizeof(char), ret->size, fd);
