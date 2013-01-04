@@ -9,7 +9,7 @@
 #ifndef control_tower_prefix_h
 #define control_tower_prefix_h
 
-#define SHARED_FILE_PATH "/Users/Youri/Xcode/control-tower/"
+#define SHARED_FILE_PATH "/root/control-tower/"
 #define FIFO_IN_NAME "fifo-in"
 #define ATIS_NAME "atis-1"
 #define MAX_BUF 1024
