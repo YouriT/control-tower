@@ -92,6 +92,7 @@ int main(int argc, const char * argv[])
             printf("Error while creating FIFO file :\ncode : %d\nmessage : %s\n", errno, strerror(errno));
             exit(EXIT_FAILURE);
         }
+     sleep(10);
     }
     if (fifo)
         fclose(fifo);
