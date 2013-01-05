@@ -51,6 +51,7 @@ int main(int argc, const char * argv[])
             char c = (char)(n+65);
             meteo[i+j] = c;
             j++;
+            printf("%d + %d = %d \n",i,j,i+j);
         }
         meteo[i+j] = ' ';
         i += j + 1;
