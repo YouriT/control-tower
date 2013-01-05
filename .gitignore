@@ -17,3 +17,7 @@
 *.app
 
 *.xcodeproj
+
+atis
+control-tower
+pilot
