@@ -45,7 +45,7 @@ int main(int argc, const char * argv[])
 
          }
 
-         fwrite(meteo,sizeof(char),strlen(meteo), 1, atisFile);
+         fwrite(meteo,sizeof(char),strlen(meteo), atisFile);
 
          fclose(atisFile);
 
