@@ -42,7 +42,7 @@ int main(int argc, const char * argv[])
     int i = 0;
     int j;
     srand((int)(time(NULL)));
-    while (i < 47)
+    while (i < 39)
     {
         j = 0;
         while (j < 5)
@@ -55,7 +55,7 @@ int main(int argc, const char * argv[])
 
         }
         meteo[i+j] = ' ';
-        printf("%d = ESPACE \n",i+j);
+        printf("%d = ESPACE => %c\n",i+j,c);
         i += j + 1;
     }
 
