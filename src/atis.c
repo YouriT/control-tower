@@ -40,7 +40,7 @@ int main(int argc, const char * argv[])
             i++;
             j++;
              }
-            strcat(meteo.content,' ');
+            strcat(meteo.content," ");
             i++;
 
          }
