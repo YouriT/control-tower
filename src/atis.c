@@ -42,7 +42,7 @@ int main(int argc, const char * argv[])
     int i = 0;
     int j;
     srand((int)(time(NULL)));
-    while (i < 35)
+    while (i < 41)
     {
         j = 0;
         while (j < 5)
