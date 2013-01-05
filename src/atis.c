@@ -50,8 +50,9 @@ int main(int argc, const char * argv[])
             int n = 26 * (rand() / (RAND_MAX + 1.0));
             char c = (char)(n+65);
             meteo[i+j] = c;
-            j++;
             printf("%d + %d = %d \n",i,j,i+j);
+            j++;
+
         }
         meteo[i+j] = ' ';
         printf("%d = ESPACE \n",i+j);
