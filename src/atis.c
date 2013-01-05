@@ -54,6 +54,7 @@ int main(int argc, const char * argv[])
             printf("%d + %d = %d \n",i,j,i+j);
         }
         meteo[i+j] = ' ';
+        printf("%d = ESPACE \n",i+j);
         i += j + 1;
     }
 
