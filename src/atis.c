@@ -24,11 +24,12 @@ int main(int argc, const char * argv[])
         FILE * lockFile = fopen(SHARED_FILE_PATH
                        ATIS_NAME
                        ".lock", "w");
-        message meteo;
+
         FILE * atisFile;
         if((atisFile = fopen(SHARED_FILE_PATH
                             ATIS_NAME,"w+"))){
 /**
+        message meteo;
          int i = 0;
          int j;
          while (i <= 30) {
@@ -45,8 +46,9 @@ int main(int argc, const char * argv[])
             i++;
 
          }
-        *//
+
          fwrite(meteo.content,sizeof(message), 1, atisFile);
+                 */
          fclose(atisFile);
 
 
