@@ -38,11 +38,11 @@ int main(int argc, const char * argv[])
         exit(EXIT_FAILURE);
     }
 
-    char meteo[41];
+    char meteo[48];
     int i = 0;
     int j;
     srand((int)(time(NULL)));
-    while (i < 41)
+    while (i < 47)
     {
         j = 0;
         while (j < 5)
@@ -55,9 +55,8 @@ int main(int argc, const char * argv[])
 
         }
         meteo[i+j] = ' ';
-        printf("%d = ESPACE => %c\n",i+j,meteo[i+j]);
+        printf("%d = ESPACE \n",i+j);
         i += j + 1;
-        printf("%d NEXT\n",i);
     }
 
     printf("Meteo : %s\nSize : %zd\n",meteo,strlen(meteo));
