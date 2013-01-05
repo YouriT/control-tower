@@ -11,52 +11,59 @@
 #include "shared.h"
 #include <time.h>
 #include <string.h>
+#include <unistd.h>
 #define BUFFER_LENGTH 40
 
 
 
 int main(int argc, const char * argv[])
-
-
 {
-        FILE * lockFile = fopen(SHARED_FILE_PATH
-                       ATIS_NAME
-                       ".lock", "w");
-
-        FILE * atisFile;
-        if((atisFile = fopen(SHARED_FILE_PATH
-                            ATIS_NAME,"w+"))){
-
-        char meteo[40];
-         int i = 0;
-         int j;
-         while (i <= 30) {
-             j =0;
-             while (j<=5){
-            int n = rand() % 26;
-            char* c = (char*)(n+65);
-           strcat(meteo,c);
-            i++;
+    FILE * lockFile = fopen(SHARED_FILE_PATH
+                            ATIS_NAME
+                            ".lock", "w");
+    if (!lockFile)
+    {
+        printf("Lock file couldn't be created");
+        exit(EXIT_FAILURE);
+    }
+    
+    FILE * atisFile = fopen(SHARED_FILE_PATH
+                            ATIS_NAME,"w+");
+    if (!lockFile)
+    {
+        printf("ATIS file couldn't be opened");
+        exit(EXIT_FAILURE);
+    }
+    
+    char meteo[40];
+    int i = 0;
+    int j;
+    srand((int)(time(NULL)));
+    while (i < 35)
+    {
+        j = 0;
+        while (j < 5)
+        {
+            int n = 26 * (rand() / (RAND_MAX + 1.0));
+            char c = (char)(n+65);
+            meteo[i+j] = c;
             j++;
-             }
-
-           strcat(meteo," ");
-            i++;
-
-         }
-
-         fwrite(meteo,sizeof(char),strlen(meteo), atisFile);
-
-         fclose(atisFile);
-
-
-         }
-
-        fclose(lockFile);
-         remove(SHARED_FILE_PATH
-                       ATIS_NAME
-                       ".lock");
-
+        }
+        meteo[i+j] = ' ';
+        i += j + 1;
+    }
+    
+    printf("Meteo : %s\nSize : %zd\n",meteo,strlen(meteo));
+    
+    fwrite(meteo, sizeof(char), strlen(meteo), atisFile);
+    
+    fclose(atisFile);
+    fclose(lockFile);
+    
+    unlink(SHARED_FILE_PATH
+           ATIS_NAME
+           ".lock");
+    
 }
 
 
