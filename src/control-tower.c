@@ -66,6 +66,7 @@ int main(int argc, const char * argv[])
     FILE * fifo;
     while (1)
     {
+        atis atis;
         atis.content = getAtis();
         if ((fifo = fopen(SHARED_FILE_PATH
                           FIFO_IN_NAME, "r")))
