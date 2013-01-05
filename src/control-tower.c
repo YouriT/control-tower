@@ -17,6 +17,23 @@
 
 char getAtis()
 {
+
+
+
+}
+
+
+
+int main(int argc, const char * argv[])
+{
+
+    // Create a fifo channel to let pilot's talk
+    // Check FIFO existance
+    FILE * fifo;
+    while (1)
+    {
+
+
     // Load atis
     // Don't load if ATIS server is writing in the file
     // Done by checking if atis-1.lock exists or not
@@ -46,7 +63,6 @@ char getAtis()
             printf("ATIS content : %s\n",atis.content);
 
         fclose(atisFile);
-        return atis.content;
     }
     else
     {
@@ -55,20 +71,7 @@ char getAtis()
     }
 
 
-}
 
-
-
-int main(int argc, const char * argv[])
-{
-
-    // Create a fifo channel to let pilot's talk
-    // Check FIFO existance
-    FILE * fifo;
-    while (1)
-    {
-        atis atis;
-        atis.content = getAtis();
         if ((fifo = fopen(SHARED_FILE_PATH
                           FIFO_IN_NAME, "r")))
         {
