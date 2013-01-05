@@ -46,14 +46,14 @@ int main(int argc, const char * argv[])
          }
          fwrite(meteo.content,sizeof(message), 1, atisFile);
          fclose(atisFile);
-         fclose(lockFile);
-         remove(SHARED_FILE_PATH
-                       ATIS_NAME
-                       ".lock");
+
 
          }
 
-
+        fclose(lockFile);
+         remove(SHARED_FILE_PATH
+                       ATIS_NAME
+                       ".lock");
 
 }
 
