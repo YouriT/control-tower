@@ -18,6 +18,9 @@
 
 int main(int argc, const char * argv[])
 {
+    while(1){
+
+
     FILE * lockFile = fopen(SHARED_FILE_PATH
                             ATIS_NAME
                             ".lock", "w");
@@ -64,6 +67,8 @@ int main(int argc, const char * argv[])
            ATIS_NAME
            ".lock");
 
+    sleep(10);
+    }
 }
 
 
