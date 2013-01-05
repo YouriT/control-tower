@@ -46,6 +46,7 @@ char getAtis()
             printf("ATIS content : %s\n",atis.content);
 
         fclose(atisFile);
+        return atis.content;
     }
     else
     {
