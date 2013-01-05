@@ -26,7 +26,7 @@ int main(int argc, const char * argv[])
     FILE * fifo;
     while (1)
     {
-    printf("test");
+
 
 
     // Load atis
@@ -49,6 +49,7 @@ int main(int argc, const char * argv[])
         int i = 0;
         while ((fread(&c, sizeof(char), 1, atisFile) > 0) && i < MAX_BUF)
         {
+            printf("test %d",i);
             atis.content[i] = c;
             i++;
         }
