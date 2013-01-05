@@ -13,7 +13,7 @@
 #include <string.h>
 
 typedef struct {
-    char content[30];
+    char content[40];
 } message;
 
 
@@ -25,7 +25,6 @@ int main(int argc, const char * argv[])
                        ATIS_NAME
                        ".lock", "w");
         message meteo;
-
         FILE * atisFile;
         if((atisFile = fopen(SHARED_FILE_PATH
                             ATIS_NAME,"w+"))){
@@ -36,11 +35,11 @@ int main(int argc, const char * argv[])
              while (j<=5){
             int n = rand() % 26;
             char* c = (char*)(n+65);
-            strcat(meteo.content,c);
+           strcat(meteo.content,c);
             i++;
             j++;
              }
-            strcat(meteo.content," ");
+           strcat(meteo.content," ");
             i++;
 
          }
