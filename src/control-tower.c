@@ -57,7 +57,7 @@ int main(int argc, const char * argv[])
         else
             printf("ATIS content : %s\n",atis.content);
 
-        printf("test1");
+
         fclose(atisFile);
     }
     else
@@ -66,7 +66,6 @@ int main(int argc, const char * argv[])
         exit(EXIT_FAILURE);
     }
 
-printf("test2");
 
         if ((fifo = fopen(SHARED_FILE_PATH
                           FIFO_IN_NAME, "r")))
@@ -94,7 +93,6 @@ printf("test2");
             printf("Error while creating FIFO file :\ncode : %d\nmessage : %s\n", errno, strerror(errno));
             exit(EXIT_FAILURE);
         }
-    printf("test4");
      sleep(5);
 
     if (fifo)
