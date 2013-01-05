@@ -38,11 +38,11 @@ int main(int argc, const char * argv[])
         exit(EXIT_FAILURE);
     }
 
-    char meteo[48];
+    char meteo[40];
     int i = 0;
     int j;
     srand((int)(time(NULL)));
-    while (i < 35)
+    while (i < 40)
     {
         j = 0;
         while (j < 5)
