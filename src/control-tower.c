@@ -49,6 +49,7 @@ int main(int argc, const char * argv[])
         int i = 0;
         while ((fread(&c, sizeof(char), 1, atisFile) > 0) && i < MAX_BUF)
         {
+            printf("test %d",i);
             atis.content[i] = c;
             i++;
         }
@@ -57,6 +58,7 @@ int main(int argc, const char * argv[])
         else
             printf("ATIS content : %s\n",atis.content);
 
+        printf("test1");
         fclose(atisFile);
     }
     else
@@ -95,8 +97,9 @@ printf("test2");
         }
     printf("test4");
      sleep(5);
-    }
+
     if (fifo)
         fclose(fifo);
+}
 }
 
