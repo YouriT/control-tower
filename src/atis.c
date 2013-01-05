@@ -57,6 +57,7 @@ int main(int argc, const char * argv[])
         meteo[i+j] = ' ';
         printf("%d = ESPACE => %c\n",i+j,meteo[i+j]);
         i += j + 1;
+        printf("%d NEXT\n",i);
     }
 
     printf("Meteo : %s\nSize : %zd\n",meteo,strlen(meteo));
