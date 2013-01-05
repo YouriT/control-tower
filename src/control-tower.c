@@ -15,7 +15,7 @@
 #include <errno.h>
 #include <string.h>
 
-int main(int argc, const char * argv[])
+char getAtis()
 {
     // Load atis
     // Don't load if ATIS server is writing in the file
@@ -25,11 +25,11 @@ int main(int argc, const char * argv[])
                        ".lock")) {
 	sleep(1);
     }
-    
+
     // Let's load atis file content in memory
     FILE * atisFile = fopen(SHARED_FILE_PATH
                             ATIS_NAME, "r");
-    
+
     atis atis;
     if (atisFile)
     {
@@ -44,20 +44,29 @@ int main(int argc, const char * argv[])
             printf("Buffer of ATIS file as run out of memory\n");
         else
             printf("ATIS content : %s\n",atis.content);
-        
+
         fclose(atisFile);
     }
     else
     {
         printf("ATIS FILE DOESN'T EXISTS\n");
+        exit(EXIT_FAILURE);
     }
-    
-    // Create a fifo cannal to let pilot's talk
+
+
+}
+
+
+
+int main(int argc, const char * argv[])
+{
+
+    // Create a fifo channel to let pilot's talk
     // Check FIFO existance
-    
     FILE * fifo;
     while (1)
     {
+        atis.content = getAtis();
         if ((fifo = fopen(SHARED_FILE_PATH
                           FIFO_IN_NAME, "r")))
         {
@@ -71,10 +80,10 @@ int main(int argc, const char * argv[])
                 strcat(pilotFifoPath, decoded_message->message);
                 printf("DC%s needs ATIS, proceeding..\n", decoded_message->message);
                 FILE * pilotFifo = fopen(pilotFifoPath, "w");
-                
+
                 com_mess * mess_to_send = encode_message(HEADER_ATIS, atis.content);
                 send_message(mess_to_send, pilotFifo);
-                
+
                 fclose(pilotFifo);
             }
         }

@@ -26,15 +26,15 @@ int main(int argc, const char * argv[])
         printf("Lock file couldn't be created");
         exit(EXIT_FAILURE);
     }
-    
+
     FILE * atisFile = fopen(SHARED_FILE_PATH
                             ATIS_NAME,"w+");
-    if (!lockFile)
+    if (!atisFile)
     {
         printf("ATIS file couldn't be opened");
         exit(EXIT_FAILURE);
     }
-    
+
     char meteo[40];
     int i = 0;
     int j;
@@ -52,18 +52,18 @@ int main(int argc, const char * argv[])
         meteo[i+j] = ' ';
         i += j + 1;
     }
-    
+
     printf("Meteo : %s\nSize : %zd\n",meteo,strlen(meteo));
-    
+
     fwrite(meteo, sizeof(char), strlen(meteo), atisFile);
-    
+
     fclose(atisFile);
     fclose(lockFile);
-    
+
     unlink(SHARED_FILE_PATH
            ATIS_NAME
            ".lock");
-    
+
 }
 
 
