@@ -11,10 +11,8 @@
 #include "shared.h"
 #include <time.h>
 #include <string.h>
+#define BUFFER_LENGTH 40
 
-typedef struct {
-    char content[40];
-} message;
 
 
 int main(int argc, const char * argv[])
@@ -29,7 +27,7 @@ int main(int argc, const char * argv[])
         if((atisFile = fopen(SHARED_FILE_PATH
                             ATIS_NAME,"w+"))){
 
-        message meteo;
+        char meteo[40];
          int i = 0;
          int j;
          while (i <= 30) {
@@ -37,18 +35,18 @@ int main(int argc, const char * argv[])
              while (j<=5){
             int n = rand() % 26;
             char* c = (char*)(n+65);
-           strcat(meteo.content,c);
+           strcat(meteo,c);
             i++;
             j++;
              }
 
-           strcat(meteo.content," ");
+           strcat(meteo," ");
             i++;
 
          }
-/**
-         fwrite(meteo.content,sizeof(message), 1, atisFile);
-                 */
+
+         fwrite(meteo,sizeof(char)*BUFFER_LENGTH, 1, atisFile);
+
          fclose(atisFile);
 
 
