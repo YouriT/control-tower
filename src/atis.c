@@ -7,6 +7,7 @@
 //
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "shared.h"
 #include <time.h>
 
@@ -21,19 +22,19 @@ int main(int argc, const char * argv[])
 {
         FILE * lockFile = fopen(SHARED_FILE_PATH
                        ATIS_NAME
-                       ".lock", "w")));
+                       ".lock", "w");
         message meteo;
 
         FILE * atisFile;
-        if(atisFILE= fopen(SHARED_FILE_PATH
-                       ATIS_NAME,"w+"))){
+        if(atisFile = fopen(SHARED_FILE_PATH
+                            ATIS_NAME,"w+")){
          int i = 0;
          int j;
          while (i <= 30) {
              j =0;
              while (j<=5){
             int n = rand() % 26;
-            char c = (char)(n+65);
+            char* c = (char)(n+65);
             strcat(meteo.content,c);
             i++;
             j++;
@@ -53,6 +54,6 @@ int main(int argc, const char * argv[])
 
 
 
-        }
-      }
-  }
+}
+
+
