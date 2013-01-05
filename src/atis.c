@@ -28,6 +28,7 @@ int main(int argc, const char * argv[])
         FILE * atisFile;
         if((atisFile = fopen(SHARED_FILE_PATH
                             ATIS_NAME,"w+"))){
+/**
          int i = 0;
          int j;
          while (i <= 30) {
@@ -39,10 +40,12 @@ int main(int argc, const char * argv[])
             i++;
             j++;
              }
+
            strcat(meteo.content," ");
             i++;
 
          }
+        *//
          fwrite(meteo.content,sizeof(message), 1, atisFile);
          fclose(atisFile);
 
