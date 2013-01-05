@@ -26,6 +26,7 @@ int main(int argc, const char * argv[])
     FILE * fifo;
     while (1)
     {
+    fprintf("test");
 
 
     // Load atis
