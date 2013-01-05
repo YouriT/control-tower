@@ -38,7 +38,7 @@ int main(int argc, const char * argv[])
         exit(EXIT_FAILURE);
     }
 
-    char meteo[43];
+    char meteo[44];
     int i = 0;
     int j;
     srand((int)(time(NULL)));
