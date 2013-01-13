@@ -58,7 +58,7 @@ int main(int argc, const char * argv[])
             com_mess * ct_mess = read_message(fifo);
             if (ct_mess->header == HEADER_ATIS)
             {
-                if(ct_mess->size == strlen(ct_mess->message))
+                if(ct_mess->size != strlen(ct_mess->message))
                 {
                     printf("ATIS OK, DC%s taking off ! Over.\n", fifoName);
                     unlink(path);
@@ -72,7 +72,7 @@ int main(int argc, const char * argv[])
             printf("ATIS KO, please send again !");
             com_mess * mess2resend = encode_message(HEADER_HI, fifoName);
             send_message(mess2resend, rs);
-            sleep(1);
+            sleep(15);
         }
 
 
