@@ -71,11 +71,11 @@ int main(int argc, const char * argv[])
             FILE* rs = fopen(SHARED_FILE_PATH FIFO_IN_NAME, "w");
             printf("ATIS KO, please send again !");
             com_mess * mess2resend = encode_message(HEADER_HI, fifoName);
-            send_message(mess2resend, ct);
+            send_message(mess2resend, rs);
             sleep(1);
-            }
-
         }
+
+
 
     }
 
