@@ -23,18 +23,23 @@ int main(int argc, const char * argv[])
     long microsec = ((unsigned long long)time.tv_sec * 1000000) + time.tv_usec;
     char fifoName[250];
     sprintf(fifoName, "%ld", microsec);
-    
+
     // Make pilot fifo
-    char path[MAX_BUF] = SHARED_FILE_PATH;
+    char path[MAXPATHLEN];
+    getwd(path);
     strcat(path, fifoName);
     mkfifo(path, 0666);
-    
-    
+    char pathb[MAXPATHLEN];
+    getwd(pathb);
+    strcat(pathb, FIFO_IN_NAME);
+
+
+
+
     // Talk to control-tower
     printf(" - Waiting for signal -\n\n");
     FILE * ct;
-    if ((ct = fopen(SHARED_FILE_PATH
-                    FIFO_IN_NAME, "w")))
+    if ((ct = fopen(pathb, "w")))
     {
         printf("Roger, here is DC%s.\nPlease provide ATIS. Over.\n", fifoName);
         com_mess * mess2send = encode_message(HEADER_HI, fifoName);
@@ -46,8 +51,8 @@ int main(int argc, const char * argv[])
         printf("Fatal error while talking to control tower. Aborting execution.");
         exit(EXIT_FAILURE);
     }
-    
-    
+
+
     printf("Waiting for ATIS..\n");
     // Listen on pilot fifo
     while (1)
@@ -67,10 +72,9 @@ int main(int argc, const char * argv[])
                 fclose(ct);
                 break;
             }
-            
-            
-            if ((ct = fopen(SHARED_FILE_PATH
-                            FIFO_IN_NAME, "w")))
+
+
+            if ((ct = fopen(pathb, "w")))
             {
                 printf("ATIS KO, please send again !\n");
                 com_mess * mess2resend = encode_message(HEADER_HI, fifoName);

@@ -20,9 +20,11 @@ int main(int argc, const char * argv[])
 {
     while(1){
 
+    char path[MAXPATHLEN];
+    getwd(path);
+    strcat(path, ATIS_NAME);
 
-    FILE * lockFile = fopen(SHARED_FILE_PATH
-                            ATIS_NAME
+    FILE * lockFile = fopen(path
                             ".lock", "w");
     if (!lockFile)
     {
@@ -30,8 +32,7 @@ int main(int argc, const char * argv[])
         exit(EXIT_FAILURE);
     }
 
-    FILE * atisFile = fopen(SHARED_FILE_PATH
-                            ATIS_NAME,"w+");
+    FILE * atisFile = fopen(path,"w+");
     if (!atisFile)
     {
         printf("ATIS file couldn't be opened");
@@ -64,8 +65,7 @@ int main(int argc, const char * argv[])
     fclose(atisFile);
     fclose(lockFile);
 
-    unlink(SHARED_FILE_PATH
-           ATIS_NAME
+    unlink(path
            ".lock");
 
     sleep(10);
