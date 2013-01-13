@@ -23,13 +23,13 @@ int main(int argc, const char * argv[])
     long microsec = ((unsigned long long)time.tv_sec * 1000000) + time.tv_usec;
     char fifoName[250];
     sprintf(fifoName, "%ld", microsec);
-
+    
     // Make pilot fifo
     char path[MAX_BUF] = SHARED_FILE_PATH;
     strcat(path, fifoName);
     mkfifo(path, 0666);
-
-
+    
+    
     // Talk to control-tower
     printf(" - Waiting for signal -\n\n");
     FILE * ct;
@@ -39,14 +39,15 @@ int main(int argc, const char * argv[])
         printf("Roger, here is DC%s.\nPlease provide ATIS. Over.\n", fifoName);
         com_mess * mess2send = encode_message(HEADER_HI, fifoName);
         send_message(mess2send, ct);
+        fclose(ct);
     }
     else
     {
         printf("Fatal error while talking to control tower. Aborting execution.");
         exit(EXIT_FAILURE);
     }
-
-
+    
+    
     printf("Waiting for ATIS..\n");
     // Listen on pilot fifo
     while (1)
@@ -59,26 +60,26 @@ int main(int argc, const char * argv[])
             printf("Opened !\n");
             com_mess * ct_mess = read_message(fifo);
             if (ct_mess->header == HEADER_ATIS && ct_mess->size != strlen(ct_mess->message))
-                {
-                    printf("ATIS OK, DC%s taking off ! Over.\n", fifoName);
-                    unlink(path);
-                    fclose(fifo);
-                    fclose(ct);
-                    break;
-                }
-
-
-            printf("ATIS KO, please send again !\n");
-            com_mess * mess2resend = encode_message(HEADER_HI, fifoName);
-            send_message(mess2resend, ct);
-            printf("Fin boucle\n");
+            {
+                printf("ATIS OK, DC%s taking off ! Over.\n", fifoName);
+                unlink(path);
+                fclose(fifo);
+                fclose(ct);
+                break;
+            }
+            
+            
+            if ((ct = fopen(SHARED_FILE_PATH
+                            FIFO_IN_NAME, "w")))
+            {
+                printf("ATIS KO, please send again !\n");
+                com_mess * mess2resend = encode_message(HEADER_HI, fifoName);
+                send_message(mess2resend, ct);
+                printf("Fin boucle\n");
+                fclose(ct);
+            }
         }
-
-
-
     }
-
-
     return 0;
 }
 
