@@ -51,7 +51,7 @@ int main(int argc, const char * argv[])
     // Listen on pilot fifo
     while (1)
     {
-        printf("Debut boucle");
+        printf("Debut boucle\n");
         FILE * fifo;
         if ((fifo = fopen(path, "r")))
         {
