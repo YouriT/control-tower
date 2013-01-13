@@ -56,6 +56,7 @@ int main(int argc, const char * argv[])
         if ((fifo = fopen(path, "r")))
         {
             // Fifo already exists, just read it
+            printf("Opened !\n");
             com_mess * ct_mess = read_message(fifo);
             if (ct_mess->header == HEADER_ATIS && ct_mess->size != strlen(ct_mess->message))
                 {
@@ -70,7 +71,7 @@ int main(int argc, const char * argv[])
             printf("ATIS KO, please send again !\n");
             com_mess * mess2resend = encode_message(HEADER_HI, fifoName);
             send_message(mess2resend, ct);
-            printf("Fin boucle");
+            printf("Fin boucle\n");
         }
 
 
