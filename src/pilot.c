@@ -45,7 +45,7 @@ int main(int argc, const char * argv[])
         printf("Fatal error while talking to control tower. Aborting execution.");
         exit(EXIT_FAILURE);
     }
-    fclose(ct);
+
 
     printf("Waiting for ATIS..\n");
     // Listen on pilot fifo
@@ -57,23 +57,19 @@ int main(int argc, const char * argv[])
         {
             // Fifo already exists, just read it
             com_mess * ct_mess = read_message(fifo);
-            if (ct_mess->header == HEADER_ATIS)
-            {
-                if(ct_mess->size != strlen(ct_mess->message))
+            if (ct_mess->header == HEADER_ATIS && ct_mess->size != strlen(ct_mess->message))
                 {
                     printf("ATIS OK, DC%s taking off ! Over.\n", fifoName);
                     unlink(path);
                     fclose(fifo);
+                    fclose(ct);
                     break;
                 }
 
-            }
 
-            FILE* rs = fopen(SHARED_FILE_PATH FIFO_IN_NAME, "w");
-            printf("ATIS KO, please send again !");
-            sleep(5);
+            printf("ATIS KO, please send again !\n");
             com_mess * mess2resend = encode_message(HEADER_HI, fifoName);
-            send_message(mess2resend, rs);
+            send_message(mess2resend, ct);
             printf("Fin boucle");
         }
 
