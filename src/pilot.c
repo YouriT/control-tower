@@ -71,9 +71,9 @@ int main(int argc, const char * argv[])
 
             FILE* rs = fopen(SHARED_FILE_PATH FIFO_IN_NAME, "w");
             printf("ATIS KO, please send again !");
+            sleep(5);
             com_mess * mess2resend = encode_message(HEADER_HI, fifoName);
             send_message(mess2resend, rs);
-            sleep(15);
             printf("Fin boucle");
         }
 
