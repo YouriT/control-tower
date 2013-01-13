@@ -51,6 +51,7 @@ int main(int argc, const char * argv[])
     // Listen on pilot fifo
     while (1)
     {
+        printf("Debut boucle");
         FILE * fifo;
         if ((fifo = fopen(path, "r")))
         {
@@ -73,6 +74,7 @@ int main(int argc, const char * argv[])
             com_mess * mess2resend = encode_message(HEADER_HI, fifoName);
             send_message(mess2resend, rs);
             sleep(15);
+            printf("Fin boucle");
         }
 
 
