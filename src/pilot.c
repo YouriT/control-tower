@@ -25,11 +25,11 @@ int main(int argc, const char * argv[])
     sprintf(fifoName, "%ld", microsec);
 
     // Make pilot fifo
-    char path[MAXPATHLEN];
+    char path[MAX_PATH];
     getwd(path);
     strcat(path, fifoName);
     mkfifo(path, 0666);
-    char pathb[MAXPATHLEN];
+    char pathb[MAX_PATH];
     getwd(pathb);
     strcat(pathb, FIFO_IN_NAME);
 

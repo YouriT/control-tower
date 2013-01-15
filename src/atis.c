@@ -21,7 +21,7 @@ int main(int argc, const char * argv[])
 {
     while(1){
 
-    char path[MAXPATHLEN];
+    char path[MAX_PATH];
     getwd(path);
     strcat(path, ATIS_NAME);
 

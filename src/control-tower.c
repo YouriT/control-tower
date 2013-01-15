@@ -22,11 +22,11 @@ int main(int argc, const char * argv[])
 {
 
 
-    char path[MAXPATHLEN];
+    char path[MAX_PATH];
     getwd(path);
     strcat(path, ATIS_NAME);
 
-    char pathb[MAXPATHLEN];
+    char pathb[MAX_PATH];
     getwd(pathb);
     strcat(pathb, FIFO_IN_NAME);
 
@@ -82,7 +82,7 @@ int main(int argc, const char * argv[])
             if (decoded_message->header == HEADER_HI)
             {
                 // Pilot requests to write on new pipe
-                char pilotFifoPath[MAXPATHLEN];
+                char pilotFifoPath[MAX_PATH];
                 getwd(pilotFifoPath);
                 strcat(pilotFifoPath, decoded_message->message);
                 printf("DC%s needs ATIS, proceeding..\n", decoded_message->message);
