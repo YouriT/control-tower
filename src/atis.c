@@ -19,62 +19,63 @@
 
 int main(int argc, const char * argv[])
 {
-    while(1){
-
+    char currentDir[MAX_PATH];
+    getcwd(currentDir, MAX_PATH);
+    
     char atisPath[MAX_PATH];
     char lockPath[MAX_PATH];
-    getcwd(atisPath, MAX_PATH);
-
-    strcpy(lockPath,atisPath);
-
-    strcat(atisPath, ATIS_NAME);
-    strcat(lockPath, ".lock");
-
-    FILE * lockFile = fopen(lockPath, "w");
-    if (!lockFile)
+    
+    sprintf(atisPath, "%s/%s", currentDir, ATIS_NAME);
+    sprintf(lockPath, "%s.lock", atisPath);
+    
+    while(1)
     {
-        printf("Lock file couldn't be created");
-        exit(EXIT_FAILURE);
-    }
-
-    FILE * atisFile = fopen(atisPath,"w+");
-    if (!atisFile)
-    {
-        printf("ATIS file couldn't be opened");
-        exit(EXIT_FAILURE);
-    }
-
-        char meteo[42] = {0};
-    int i = 0;
-    int j;
-    srand((int)(time(NULL)));
-    while (i < 40)
-    {
-        j = 0;
-        while (j < 5)
+        FILE * lockFile = fopen(lockPath, "w");
+        if (!lockFile)
         {
-            int n = 26 * (rand() / (RAND_MAX + 1.0));
-            char c = (char)(n+65);
-            meteo[i+j] = c;
-            j++;
+            printf("Lock file couldn't be created");
+            exit(EXIT_FAILURE);
         }
-        meteo[i+j] = (char)32;
-        i += j + 1;
-        if (i == 42)
-            meteo[41] = '\0';
+        
+        FILE * atisFile = fopen(atisPath,"w+");
+        if (!atisFile)
+        {
+            printf("ATIS file couldn't be opened");
+            exit(EXIT_FAILURE);
+        }
+        
+        char meteo[42] = {0};
+        int i = 0;
+        int j;
+        srand((int)(time(NULL)));
+        while (i < 40)
+        {
+            j = 0;
+            while (j < 5)
+            {
+                int n = 26 * (rand() / (RAND_MAX + 1.0));
+                char c = (char)(n+65);
+                meteo[i+j] = c;
+                j++;
+            }
+            meteo[i+j] = (char)32;
+            i += j + 1;
+            if (i == 42)
+                meteo[41] = '\0';
+        }
+        
+        printf("Meteo : \"%s\"\nSize : %zd\n",meteo,strlen(meteo));
+        
+        fwrite(meteo, sizeof(char), strlen(meteo), atisFile);
+        
+        fclose(atisFile);
+        fclose(lockFile);
+        
+        unlink(lockPath);
+        
+        sleep(10);
     }
-
-    printf("Meteo : \"%s\"\nSize : %zd\n",meteo,strlen(meteo));
-
-    fwrite(meteo, sizeof(char), strlen(meteo), atisFile);
-
-    fclose(atisFile);
-    fclose(lockFile);
-
-    unlink(lockPath);
-
-    sleep(10);
-    }
+    exit(EXIT_SUCCESS);
 }
 
 

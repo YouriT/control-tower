@@ -21,69 +21,73 @@ int main(int argc, const char * argv[])
     struct timeval time;
     gettimeofday(&time, NULL);
     long microsec = ((unsigned long long)time.tv_sec * 1000000) + time.tv_usec;
-    char fifoName[250];
-    sprintf(fifoName, "%ld", microsec);
-
+    char pilotName[250];
+    sprintf(pilotName, "%ld", microsec);
+    
     // Make pilot fifo
-    char fifoPath[MAX_PATH];
-    char fifoNamePath[MAX_PATH];
-
-    getcwd(fifoPath, MAX_PATH);
-    strcpy(fifoNamePath,fifoPath);
-    mkfifo(fifoPath, 0666);
-
-    strcat(fifoPath, fifoName);
-    strcat(fifoNamePath, FIFO_IN_NAME);
-
-
-
-
+    char currentDir[MAX_PATH];
+    getcwd(currentDir, MAX_PATH);
+    
+    char ctFifoInPath[MAX_PATH];
+    char pilotFifoPath[MAX_PATH];
+    
+    sprintf(ctFifoInPath, "%s/%s", currentDir, FIFO_IN_NAME);
+    sprintf(pilotFifoPath, "%s/%s", currentDir, pilotName);
+    
+    mkfifo(pilotFifoPath, 0666);
+    
     // Talk to control-tower
     printf(" - Waiting for signal -\n\n");
-    FILE * ct;
-    if ((ct = fopen(fifoNamePath, "w")))
+    FILE * ctFifoFd;
+    if ((ctFifoFd = fopen(ctFifoInPath, "w")))
     {
-        printf("Roger, here is DC%s.\nPlease provide ATIS. Over.\n", fifoName);
-        com_mess * mess2send = encode_message(HEADER_HI, fifoName);
-        send_message(mess2send, ct);
-        fclose(ct);
+        printf("Roger, here is DC%s.\nPlease provide ATIS. Over.\n", pilotName);
+        com_mess * mess2send = encode_message(HEADER_HI, pilotName);
+        send_message(mess2send, ctFifoFd);
+        fclose(ctFifoFd);
     }
     else
     {
         printf("Fatal error while talking to control tower. Aborting execution.");
         exit(EXIT_FAILURE);
     }
-
-
+    
+    
     printf("Waiting for ATIS..\n");
     // Listen on pilot fifo
     while (1)
     {
-        FILE * fifo;
-        if ((fifo = fopen(fifoPath, "r")))
+        FILE * pilotFifoFd;
+        if ((pilotFifoFd = fopen(pilotFifoPath, "r")))
         {
             // Fifo already exists, just read it
             printf("Opened !\n");
-            com_mess * ct_mess = read_message(fifo);
+            com_mess * ct_mess = read_message(pilotFifoFd);
             if (ct_mess->header == HEADER_ATIS && ct_mess->size == strlen(ct_mess->message))
             {
-                printf("ATIS OK, DC%s taking off ! Over.\n", fifoName);
-                unlink(fifoPath);
-                fclose(fifo);
-                fclose(ct);
+                printf("ATIS OK, DC%s taking off ! Over.\n", pilotName);
+                unlink(pilotFifoPath);
+                fclose(pilotFifoFd);
+                fclose(ctFifoFd);
                 break;
             }
-
-
-            if ((ct = fopen(fifoNamePath, "w")))
+            
+            
+            if ((ctFifoFd = fopen(ctFifoInPath, "w")))
             {
                 printf("ATIS KO, please send again !\n");
-                com_mess * mess2resend = encode_message(HEADER_HI, fifoName);
-                send_message(mess2resend, ct);
-                fclose(ct);
+                com_mess * mess2resend = encode_message(HEADER_HI, pilotName);
+                send_message(mess2resend, ctFifoFd);
+                fclose(ctFifoFd);
             }
+            
+            if (pilotFifoFd)
+                fclose(pilotFifoFd);
         }
     }
-    return 0;
+    if (ctFifoFd)
+        fclose(ctFifoFd);
+    
+    exit(EXIT_SUCCESS);
 }
 
