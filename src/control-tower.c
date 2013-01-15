@@ -89,6 +89,7 @@ int main(int argc, const char * argv[])
             if (decoded_message->header == HEADER_HI)
             {
                 // Pilot requests to write on new pipe
+                printf("Pilot path %s\n",pilotPath);
                 strcat(pilotPath, decoded_message->message);
                 printf("DC%s needs ATIS, proceeding..\n", decoded_message->message);
                 FILE * pilotFifo = fopen(pilotPath, "w");

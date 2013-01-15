@@ -44,7 +44,7 @@ int main(int argc, const char * argv[])
         exit(EXIT_FAILURE);
     }
 
-    char meteo[42];
+        char meteo[42] = {0};
     int i = 0;
     int j;
     srand((int)(time(NULL)));
@@ -57,13 +57,14 @@ int main(int argc, const char * argv[])
             char c = (char)(n+65);
             meteo[i+j] = c;
             j++;
-
         }
-        meteo[i+j] = ' ';
+        meteo[i+j] = (char)32;
         i += j + 1;
+        if (i == 42)
+            meteo[41] = '\0';
     }
 
-    printf("Meteo : %s\nSize : %zd\n",meteo,strlen(meteo));
+    printf("Meteo : \"%s\"\nSize : %zd\n",meteo,strlen(meteo));
 
     fwrite(meteo, sizeof(char), strlen(meteo), atisFile);
 
