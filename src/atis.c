@@ -22,7 +22,7 @@ int main(int argc, const char * argv[])
     while(1){
 
     char path[MAX_PATH];
-    getwd(path);
+    getwd(path, MAX_PATH);
     strcat(path, ATIS_NAME);
 
     FILE * lockFile = fopen(path

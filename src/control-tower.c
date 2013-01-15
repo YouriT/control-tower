@@ -23,11 +23,11 @@ int main(int argc, const char * argv[])
 
 
     char path[MAX_PATH];
-    getwd(path);
+    getwd(path, MAX_PATH);
     strcat(path, ATIS_NAME);
 
     char pathb[MAX_PATH];
-    getwd(pathb);
+    getwd(pathb, MAX_PATH);
     strcat(pathb, FIFO_IN_NAME);
 
     // Create a fifo channel to let pilot's talk
@@ -83,7 +83,7 @@ int main(int argc, const char * argv[])
             {
                 // Pilot requests to write on new pipe
                 char pilotFifoPath[MAX_PATH];
-                getwd(pilotFifoPath);
+                getwd(pilotFifoPath, MAX_PATH);
                 strcat(pilotFifoPath, decoded_message->message);
                 printf("DC%s needs ATIS, proceeding..\n", decoded_message->message);
                 FILE * pilotFifo = fopen(pilotFifoPath, "w");
