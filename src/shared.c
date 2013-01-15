@@ -47,7 +47,7 @@ com_mess * encode_message(int header, const char * message)
     ret->header = header;
     ret->size = strlen(message);
     ret->message = malloc(sizeof(char) * ret->size);
-    strcpy(ret->message, message);
+    sprintf(ret->message, "%s", message);
     return ret;
 }
 

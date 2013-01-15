@@ -58,7 +58,7 @@ int main(int argc, const char * argv[])
                 i++;
             }
             if (i == MAX_BUF)
-                printf("Buffer of ATIS file as run out of memory\n");
+                printf("Buffer of ATIS file has run out of memory\n");
             else
                 printf("ATIS content : %s\n",atis.content);
             
@@ -67,7 +67,7 @@ int main(int argc, const char * argv[])
         }
         else
         {
-            printf("ATIS FILE DOESN'T EXISTS\n");
+            printf("ATIS FILE DOESN'T EXIST\n");
             exit(EXIT_FAILURE);
         }
         
