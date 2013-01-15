@@ -23,7 +23,7 @@ int main(int argc, const char * argv[])
 
     char atisPath[MAX_PATH];
     char lockPath[MAX_PATH];
-    getwd(atisPath, MAX_PATH);
+    getcwd(atisPath, MAX_PATH);
 
     strcpy(lockPath,atisPath);
 
