@@ -71,6 +71,9 @@ int main(int argc, const char * argv[])
             exit(EXIT_FAILURE);
         }
         
+#ifdef DEBUG
+        printf("Fifo in path : %s\n", fifoPath);
+#endif
         
         if ((fifo = fopen(fifoPath, "r")))
         {
@@ -80,7 +83,7 @@ int main(int argc, const char * argv[])
             if (decoded_message->header == HEADER_HI)
             {
                 // Pilot requests to write on new pipe
-                char temp[MAX_PATH] = {0};
+                char temp[MAX_PATH];
                 sprintf(temp, "%s/%s", currentDir, decoded_message->message);
 #ifdef DEBUG
                 printf("Pilot path %s\n",temp);

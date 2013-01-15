@@ -9,6 +9,8 @@
 #ifndef control_tower_prefix_h
 #define control_tower_prefix_h
 
+#define DEBUG 1
+
 #define FIFO_IN_NAME "fifo-in"
 #define ATIS_NAME "atis-1"
 #define MAX_BUF 1024
