@@ -37,6 +37,8 @@ int main(int argc, const char * argv[])
     strcat(fifoPath,FIFO_IN_NAME);
     strcat(lockPath,".lock");
 
+    printf("%s",atisPath);
+
 
     // Create a fifo channel to let pilot's talk
     // Check FIFO existance
