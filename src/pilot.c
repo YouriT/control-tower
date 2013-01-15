@@ -67,8 +67,8 @@ int main(int argc, const char * argv[])
             if (ct_mess->header == HEADER_ATIS && ct_mess->size == strlen(ct_mess->message))
             {
                 printf("ATIS OK, DC%s taking off ! Over.\n", pilotName);
-                unlink(pilotFifoPath);
                 fclose(pilotFifoFd);
+                unlink(pilotFifoPath);
                 fclose(ctFifoFd);
                 free(ct_mess);
                 break;
@@ -86,11 +86,11 @@ int main(int argc, const char * argv[])
                 fclose(ctFifoFd);
             }
             
-            if (pilotFifoFd)
+            if (pilotFifoFd != NULL)
                 fclose(pilotFifoFd);
         }
     }
-    if (ctFifoFd)
+    if (ctFifoFd != NULL)
         fclose(ctFifoFd);
     
     exit(EXIT_SUCCESS);
