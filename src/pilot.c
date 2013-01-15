@@ -26,11 +26,13 @@ int main(int argc, const char * argv[])
 
     // Make pilot fifo
     char fifoPath[MAX_PATH];
-    getwd(fifoPath, MAX_PATH);
-    strcat(fifoPath, fifoName);
-    mkfifo(fifoPath, 0666);
     char fifoNamePath[MAX_PATH];
-    getwd(fifoNamePath, MAX_PATH);
+
+    getwd(fifoPath, MAX_PATH);
+    strcpy(fifoNamePath,fifoPath);
+    mkfifo(fifoPath, 0666);
+
+    strcat(fifoPath, fifoName);
     strcat(fifoNamePath, FIFO_IN_NAME);
 
 
