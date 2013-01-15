@@ -28,7 +28,7 @@ int main(int argc, const char * argv[])
     char fifoPath[MAX_PATH];
     char fifoNamePath[MAX_PATH];
 
-    getwd(fifoPath, MAX_PATH);
+    getcwd(fifoPath, MAX_PATH);
     strcpy(fifoNamePath,fifoPath);
     mkfifo(fifoPath, 0666);
 
