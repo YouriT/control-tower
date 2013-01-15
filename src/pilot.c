@@ -25,13 +25,13 @@ int main(int argc, const char * argv[])
     sprintf(fifoName, "%ld", microsec);
 
     // Make pilot fifo
-    char path[MAX_PATH];
-    getwd(path, MAX_PATH);
-    strcat(path, fifoName);
-    mkfifo(path, 0666);
-    char pathb[MAX_PATH];
-    getwd(pathb, MAX_PATH);
-    strcat(pathb, FIFO_IN_NAME);
+    char fifoPath[MAX_PATH];
+    getwd(fifoPath, MAX_PATH);
+    strcat(fifoPath, fifoName);
+    mkfifo(fifoPath, 0666);
+    char fifoNamePath[MAX_PATH];
+    getwd(fifoNamePath, MAX_PATH);
+    strcat(fifoNamePath, FIFO_IN_NAME);
 
 
 
@@ -39,7 +39,7 @@ int main(int argc, const char * argv[])
     // Talk to control-tower
     printf(" - Waiting for signal -\n\n");
     FILE * ct;
-    if ((ct = fopen(pathb, "w")))
+    if ((ct = fopen(fifoNamePath, "w")))
     {
         printf("Roger, here is DC%s.\nPlease provide ATIS. Over.\n", fifoName);
         com_mess * mess2send = encode_message(HEADER_HI, fifoName);
@@ -59,7 +59,7 @@ int main(int argc, const char * argv[])
     {
         printf("Debut boucle\n");
         FILE * fifo;
-        if ((fifo = fopen(path, "r")))
+        if ((fifo = fopen(fifoPath, "r")))
         {
             // Fifo already exists, just read it
             printf("Opened !\n");
@@ -67,14 +67,14 @@ int main(int argc, const char * argv[])
             if (ct_mess->header == HEADER_ATIS && ct_mess->size != strlen(ct_mess->message))
             {
                 printf("ATIS OK, DC%s taking off ! Over.\n", fifoName);
-                unlink(path);
+                unlink(fifoPath);
                 fclose(fifo);
                 fclose(ct);
                 break;
             }
 
 
-            if ((ct = fopen(pathb, "w")))
+            if ((ct = fopen(fifoNamePath, "w")))
             {
                 printf("ATIS KO, please send again !\n");
                 com_mess * mess2resend = encode_message(HEADER_HI, fifoName);

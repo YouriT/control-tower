@@ -22,13 +22,21 @@ int main(int argc, const char * argv[])
 {
 
 
-    char path[MAX_PATH];
-    getcwd(path, MAX_PATH);
-    strcat(path, ATIS_NAME);
+    char atisPath[MAX_PATH];
+    char lockPath[MAX_PATH];
+    char fifoPath[MAX_PATH];
+    char pilotPath[MAX_PATH];
 
-    char pathb[MAX_PATH];
-    getcwd(pathb, MAX_PATH);
-    strcat(pathb, FIFO_IN_NAME);
+    getcwd(atisPath,MAX_PATH);
+
+    strcpy(lockPath,atisPath);
+    strcpy(fifoPath,atisPath);
+    strcpy(pilotPath,atisPath);
+
+    strcat(atisPath,ATIS_NAME);
+    strcat(fifoPath,FIFO_IN_NAME);
+    strcat(lockPath,".lock");
+
 
     // Create a fifo channel to let pilot's talk
     // Check FIFO existance
@@ -41,13 +49,12 @@ int main(int argc, const char * argv[])
     // Load atis
     // Don't load if ATIS server is writing in the file
     // Done by checking if atis-1.lock exists or not
-    while (file_exists(path
-                       ".lock")) {
+    while (file_exists(lockPath)) {
 	sleep(1);
     }
 
     // Let's load atis file content in memory
-    FILE * atisFile = fopen(path, "r");
+    FILE * atisFile = fopen(atisPath, "r");
 
     atis atis;
     if (atisFile)
@@ -74,7 +81,7 @@ int main(int argc, const char * argv[])
     }
 
 
-        if ((fifo = fopen(pathb, "r")))
+        if ((fifo = fopen(fifoPath, "r")))
         {
             // Fifo already exists, just read it
             printf("COM received on main channel..\n");
@@ -82,12 +89,9 @@ int main(int argc, const char * argv[])
             if (decoded_message->header == HEADER_HI)
             {
                 // Pilot requests to write on new pipe
-                char pilotFifoPath[MAX_PATH];
-                getwd(pilotFifoPath, MAX_PATH);
-                strcat(pilotFifoPath, decoded_message->message);
+                strcat(pilotPath, decoded_message->message);
                 printf("DC%s needs ATIS, proceeding..\n", decoded_message->message);
-                FILE * pilotFifo = fopen(pilotFifoPath, "w");
-
+                FILE * pilotFifo = fopen(pilotPath, "w");
                 com_mess * mess_to_send = encode_message(HEADER_ATIS, atis.content);
                 send_message(mess_to_send, pilotFifo);
 

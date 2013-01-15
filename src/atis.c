@@ -21,19 +21,23 @@ int main(int argc, const char * argv[])
 {
     while(1){
 
-    char path[MAX_PATH];
-    getwd(path, MAX_PATH);
-    strcat(path, ATIS_NAME);
+    char atisPath[MAX_PATH];
+    char lockPath[MAX_PATH];
+    getwd(atisPath, MAX_PATH);
 
-    FILE * lockFile = fopen(path
-                            ".lock", "w");
+    strcpy(lockPath,atisPath);
+
+    strcat(atisPath, ATIS_NAME);
+    strcat(lockPath, ".lock");
+
+    FILE * lockFile = fopen(lockPath, "w");
     if (!lockFile)
     {
         printf("Lock file couldn't be created");
         exit(EXIT_FAILURE);
     }
 
-    FILE * atisFile = fopen(path,"w+");
+    FILE * atisFile = fopen(atisPath,"w+");
     if (!atisFile)
     {
         printf("ATIS file couldn't be opened");
@@ -66,8 +70,7 @@ int main(int argc, const char * argv[])
     fclose(atisFile);
     fclose(lockFile);
 
-    unlink(path
-           ".lock");
+    unlink(lockPath);
 
     sleep(10);
     }
