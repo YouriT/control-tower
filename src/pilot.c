@@ -44,6 +44,7 @@ int main(int argc, const char * argv[])
         printf("Roger, here is DC%s.\nPlease provide ATIS. Over.\n", pilotName);
         com_mess * mess2send = encode_message(HEADER_HI, pilotName);
         send_message(mess2send, ctFifoFd);
+        free(mess2send);
         fclose(ctFifoFd);
     }
     else
@@ -69,15 +70,19 @@ int main(int argc, const char * argv[])
                 unlink(pilotFifoPath);
                 fclose(pilotFifoFd);
                 fclose(ctFifoFd);
+                free(ct_mess);
                 break;
             }
             
+            if (ct_mess != NULL)
+                free(ct_mess);
             
             if ((ctFifoFd = fopen(ctFifoInPath, "w")))
             {
                 printf("ATIS KO, please send again !\n");
                 com_mess * mess2resend = encode_message(HEADER_HI, pilotName);
                 send_message(mess2resend, ctFifoFd);
+                free(mess2resend);
                 fclose(ctFifoFd);
             }
             

@@ -82,11 +82,16 @@ int main(int argc, const char * argv[])
                 // Pilot requests to write on new pipe
                 char temp[MAX_PATH] = {0};
                 sprintf(temp, "%s/%s", currentDir, decoded_message->message);
+#ifdef DEBUG
                 printf("Pilot path %s\n",temp);
+#endif
                 printf("DC%s needs ATIS, proceeding..\n", decoded_message->message);
+                free(decoded_message);
+                
                 FILE * pilotFifo = fopen(temp, "w");
                 com_mess * mess_to_send = encode_message(HEADER_ATIS, atis.content);
                 send_message(mess_to_send, pilotFifo);
+                free(mess_to_send);
                 
                 fclose(pilotFifo);
             }
