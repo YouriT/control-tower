@@ -59,14 +59,13 @@ int main(int argc, const char * argv[])
     // Listen on pilot fifo
     while (1)
     {
-        printf("Debut boucle\n");
         FILE * fifo;
         if ((fifo = fopen(fifoPath, "r")))
         {
             // Fifo already exists, just read it
             printf("Opened !\n");
             com_mess * ct_mess = read_message(fifo);
-            if (ct_mess->header == HEADER_ATIS && ct_mess->size != strlen(ct_mess->message))
+            if (ct_mess->header == HEADER_ATIS && ct_mess->size == strlen(ct_mess->message))
             {
                 printf("ATIS OK, DC%s taking off ! Over.\n", fifoName);
                 unlink(fifoPath);
@@ -81,7 +80,6 @@ int main(int argc, const char * argv[])
                 printf("ATIS KO, please send again !\n");
                 com_mess * mess2resend = encode_message(HEADER_HI, fifoName);
                 send_message(mess2resend, ct);
-                printf("Fin boucle\n");
                 fclose(ct);
             }
         }
