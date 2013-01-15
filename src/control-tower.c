@@ -23,11 +23,11 @@ int main(int argc, const char * argv[])
 
 
     char path[MAX_PATH];
-    getwd(path, MAX_PATH);
+    getcwd(path, MAX_PATH);
     strcat(path, ATIS_NAME);
 
     char pathb[MAX_PATH];
-    getwd(pathb, MAX_PATH);
+    getcwd(pathb, MAX_PATH);
     strcat(pathb, FIFO_IN_NAME);
 
     // Create a fifo channel to let pilot's talk
