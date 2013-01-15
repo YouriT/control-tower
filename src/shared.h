@@ -12,6 +12,7 @@
 #define FIFO_IN_NAME "fifo-in"
 #define ATIS_NAME "atis-1"
 #define MAX_BUF 1024
+#define MAX_PATH 260
 
 #define HEADER_HI 1
 #define HEADER_ATIS 2
