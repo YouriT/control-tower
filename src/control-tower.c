@@ -98,7 +98,7 @@ int main(int argc, const char * argv[])
                 fclose(pilotFifo);
             }
         }
-        else if(mkfifo(pathb, 0666) != 0)
+        else if(mkfifo(fifoPath, 0666) != 0)
         {
             printf("Error while creating FIFO file :\ncode : %d\nmessage : %s\n", errno, strerror(errno));
             exit(EXIT_FAILURE);
