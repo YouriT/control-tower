@@ -20,7 +20,7 @@ int main(int argc, const char * argv[])
 {
     struct timeval time;
     gettimeofday(&time, NULL);
-    long microsec = ((unsigned long long)time.tv_sec * 1000000) + time.tv_usec;
+    long microsec = ((unsigned long)time.tv_sec);
     char pilotName[250];
     sprintf(pilotName, "%ld", microsec);
     
