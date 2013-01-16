@@ -46,7 +46,7 @@ com_mess * encode_message(int header, const char * message)
     com_mess * ret = malloc(sizeof(com_mess));
     ret->header = header;
     ret->size = strlen(message);
-    ret->message = malloc(sizeof(char) * ret->size);
+    ret->message = malloc(sizeof(char) * (ret->size+1));
     sprintf(ret->message, "%s", message);
     return ret;
 }
@@ -64,7 +64,7 @@ com_mess * read_message(FILE * fd)
     printf("Length : %zu\n",ret->size);
 #endif
     
-    ret->message = malloc(sizeof(char)*ret->size);
+    ret->message = malloc(sizeof(char)*(ret->size+1));
     fread(ret->message, sizeof(char), ret->size, fd);
 #ifdef DEBUG
     printf("Message : %s\n--------------------------------------------\n",ret->message);
