@@ -70,7 +70,7 @@ int main(int argc, const char * argv[])
                 fclose(pilotFifoFd);
                 unlink(pilotFifoPath);
 //                fclose(ctFifoFd);
-                free(ct_mess);
+                free_message(ct_mess);
                 break;
             }
             
@@ -82,7 +82,7 @@ int main(int argc, const char * argv[])
                 printf("ATIS KO, please send again !\n");
                 com_mess * mess2resend = encode_message(HEADER_HI, pilotName);
                 send_message(mess2resend, ctFifoFd);
-                free(mess2resend);
+                free_message(mess2resend)
 //                fclose(ctFifoFd);
             }
             

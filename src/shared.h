@@ -36,5 +36,6 @@ int file_exists(const char * path);
 com_mess * encode_message(int header, const char * message);
 com_mess * read_message(FILE * fd);
 void send_message(com_mess * com, FILE * fd);
+void free_message(com_mess * com);
 
 #endif

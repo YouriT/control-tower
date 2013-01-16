@@ -73,3 +73,9 @@ com_mess * read_message(FILE * fd)
 #endif
     return ret;
 }
+
+void free_message(com_mess * com)
+{
+    free(com->message);
+    free(com);
+}
