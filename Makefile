@@ -1,5 +1,5 @@
 CC      = gcc
-CFLAGS  = -std=c99 -Wall -Werror
+CFLAGS  = -std=c99 -Wall -Werror -O0
 LDFLAGS =
 EXEC    = control-tower pilot atis
 SRC     = $(wildcard src/*.c)
