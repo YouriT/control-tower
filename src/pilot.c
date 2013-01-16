@@ -69,7 +69,7 @@ int main(int argc, const char * argv[])
                 printf("ATIS OK, DC%s taking off ! Over.\n", pilotName);
                 fclose(pilotFifoFd);
                 unlink(pilotFifoPath);
-                fclose(ctFifoFd);
+//                fclose(ctFifoFd);
                 free(ct_mess);
                 break;
             }
