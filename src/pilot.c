@@ -82,7 +82,7 @@ int main(int argc, const char * argv[])
                 printf("ATIS KO, please send again !\n");
                 com_mess * mess2resend = encode_message(HEADER_HI, pilotName);
                 send_message(mess2resend, ctFifoFd);
-                free_message(mess2resend)
+                free_message(mess2resend);
 //                fclose(ctFifoFd);
             }
             
