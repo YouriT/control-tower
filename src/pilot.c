@@ -69,7 +69,7 @@ int main(int argc, const char * argv[])
                 printf("ATIS OK, DC%s taking off ! Over.\n", pilotName);
                 fclose(pilotFifoFd);
                 unlink(pilotFifoPath);
-                fclose(ctFifoFd);
+//                fclose(ctFifoFd);
                 free(ct_mess);
                 break;
             }
@@ -83,7 +83,7 @@ int main(int argc, const char * argv[])
                 com_mess * mess2resend = encode_message(HEADER_HI, pilotName);
                 send_message(mess2resend, ctFifoFd);
                 free(mess2resend);
-                fclose(ctFifoFd);
+//                fclose(ctFifoFd);
             }
             
 //            if (pilotFifoFd != NULL)
