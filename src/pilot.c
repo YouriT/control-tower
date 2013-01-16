@@ -69,13 +69,13 @@ int main(int argc, const char * argv[])
                 printf("ATIS OK, DC%s taking off ! Over.\n", pilotName);
                 fclose(pilotFifoFd);
                 unlink(pilotFifoPath);
-//                fclose(ctFifoFd);
+                fclose(ctFifoFd);
                 free(ct_mess);
                 break;
             }
             
-            if (ct_mess != NULL)
-                free(ct_mess);
+//            if (ct_mess != NULL)
+//                free(ct_mess);
             
             if ((ctFifoFd = fopen(ctFifoInPath, "w")))
             {
@@ -86,12 +86,12 @@ int main(int argc, const char * argv[])
                 fclose(ctFifoFd);
             }
             
-            if (pilotFifoFd != NULL)
-                fclose(pilotFifoFd);
+//            if (pilotFifoFd != NULL)
+//                fclose(pilotFifoFd);
         }
     }
-    if (ctFifoFd != NULL)
-        fclose(ctFifoFd);
+//    if (ctFifoFd != NULL)
+//        fclose(ctFifoFd);
     
     exit(EXIT_SUCCESS);
 }
