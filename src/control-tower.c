@@ -89,23 +89,22 @@ int main(int argc, const char * argv[])
                 printf("Pilot path %s\n",temp);
 #endif
                 printf("DC%s needs ATIS, proceeding..\n", decoded_message->message);
-                free(decoded_message);
+                free_message(decoded_message);
                 
                 FILE * pilotFifo = fopen(temp, "w");
                 com_mess * mess_to_send = encode_message(HEADER_ATIS, atis.content);
                 send_message(mess_to_send, pilotFifo);
-                free(mess_to_send);
+                free_message(mess_to_send);
                 
                 fclose(pilotFifo);
             }
+            fclose(fifo);
         }
         else if(mkfifo(fifoPath, 0666) != 0)
         {
             printf("Error while creating FIFO file :\ncode : %d\nmessage : %s\n", errno, strerror(errno));
             exit(EXIT_FAILURE);
         }
-        if (fifo)
-            fclose(fifo);
     }
     exit(EXIT_SUCCESS);
 }
