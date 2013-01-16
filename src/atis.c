@@ -13,9 +13,6 @@
 #include <time.h>
 #include <string.h>
 #include <unistd.h>
-#define BUFFER_LENGTH 40
-
-
 
 int main(int argc, const char * argv[])
 {
@@ -33,22 +30,22 @@ int main(int argc, const char * argv[])
         FILE * lockFile = fopen(lockPath, "w");
         if (!lockFile)
         {
-            printf("Lock file couldn't be created");
+            printf("Lock file couldn't be created\n");
             exit(EXIT_FAILURE);
         }
         
         FILE * atisFile = fopen(atisPath,"w+");
         if (!atisFile)
         {
-            printf("ATIS file couldn't be opened");
+            printf("ATIS file couldn't be opened\n");
             exit(EXIT_FAILURE);
         }
         
-        char meteo[42] = {0};
+        char meteo[ATIS_LENGTH] = {0};
         int i = 0;
         int j;
         srand((int)(time(NULL)));
-        while (i < 40)
+        while (i < ATIS_LENGTH-1)
         {
             j = 0;
             while (j < 5)
@@ -60,8 +57,8 @@ int main(int argc, const char * argv[])
             }
             meteo[i+j] = (char)32;
             i += j + 1;
-            if (i == 42)
-                meteo[41] = '\0';
+            if (i == ATIS_LENGTH)
+                meteo[ATIS_LENGTH-1] = '\0';
         }
         
         printf("Meteo : \"%s\"\nSize : %zd\n",meteo,strlen(meteo));

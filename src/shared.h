@@ -16,13 +16,14 @@
 #define MAX_BUF 1024
 #define MAX_PATH 1024
 
+#define ATIS_LENGTH 42
+
 #define HEADER_HI 1
 #define HEADER_ATIS 2
 
 typedef struct {
     int size;
     char content[MAX_BUF];
-    int lastUp;
 } atis;
 
 typedef struct {
