@@ -20,9 +20,9 @@ int main(int argc, const char * argv[])
 {
     struct timeval time;
     gettimeofday(&time, NULL);
-    double microsec = ((double)time.tv_sec);
+    unsigned long long microsec = ((unsigned long long)time.tv_sec);
     char pilotName[250];
-    sprintf(pilotName, "%ld", microsec);
+    sprintf(pilotName, "%lld", microsec);
     
     // Make pilot fifo
     char currentDir[MAX_PATH];
