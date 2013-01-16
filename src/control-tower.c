@@ -1,88 +1,80 @@
 //
-//  main.c
 //  control-tower
 //
-//  Created by Youri Tolstoy on 4/12/12.
-//  Copyright (c) 2012 Youri Tolstoy. All rights reserved.
+//  Created by Youri Tolstoy, Gregory Bishop & Kevin Da Costa on 4/12/12.
 //
 
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <sys/stat.h>
 #include "shared.h"
-#include <errno.h>
-#include <string.h>
-
-
-
 
 int main(int argc, const char * argv[])
 {
+    // Init needed files paths
+    initPaths();
     
-    char currentDir[MAX_PATH];
-    getcwd(currentDir,MAX_PATH);
-    
-    char atisPath[MAX_PATH];
-    char lockPath[MAX_PATH];
-    char fifoPath[MAX_PATH];
-    
-    sprintf(atisPath, "%s/%s", currentDir, ATIS_NAME);
-    sprintf(lockPath, "%s.lock", atisPath);
-    sprintf(fifoPath, "%s/%s", currentDir, FIFO_IN_NAME);
-    
-    // Create a fifo channel to let pilot's talk
-    // Check FIFO existance
+    // Init some vars
     FILE * fifo;
+    int creating_fifo = 0;
+    atis atis;
     while (1)
     {
-        // Load atis
-        // Don't load if ATIS server is writing in the file
-        // Done by checking if atis-1.lock exists or not
-        while (file_exists(lockPath)) {
-            sleep(1);
-        }
-        
-        // Let's load atis file content in memory
-        FILE * atisFile = fopen(atisPath, "r");
-        
-        atis atis;
-        if (atisFile)
+        // Loop is not creating a fifo
+        if (creating_fifo == 0)
         {
-            char c;
-            int i = 0;
-            while ((fread(&c, sizeof(char), 1, atisFile) > 0) && i < MAX_BUF)
-            {
-                atis.content[i] = c;
-                i++;
+            // Load atis
+            // Don't load if ATIS server is writing in the file
+            // Done by checking if atis-1.lock exists or not
+            while (file_exists(lockPath)) {
+                sleep(1);
             }
-            if (i == MAX_BUF)
-                printf("Buffer of ATIS file has run out of memory\n");
+            
+            // Let's load atis file content in memory
+            FILE * atisFile = fopen(atisPath, "r");
+            
+            if (atisFile != NULL)
+            {
+                char c;
+                int i = 0;
+                memset(atis.content, 0, MAX_BUF);
+                // fill atis struct with correct ATIS
+                while ((fread(&c, sizeof(char), 1, atisFile) > 0) && i < MAX_BUF-1)
+                {
+                    atis.content[i] = c;
+                    i++;
+                }
+                if (i == MAX_BUF-1)
+                {
+                    printf("Buffer of ATIS file has run out of memory\n");
+                    exit(EXIT_FAILURE);
+                }
+                else
+                    printf("ATIS content : %s\n",atis.content);
+                
+                
+                fclose(atisFile);
+            }
             else
-                printf("ATIS content : %s\n",atis.content);
-            
-            
-            fclose(atisFile);
+            {
+                printf("ATIS FILE DOESN'T EXIST\n");
+                exit(EXIT_FAILURE);
+            }
         }
         else
-        {
-            printf("ATIS FILE DOESN'T EXIST\n");
-            exit(EXIT_FAILURE);
-        }
+            creating_fifo = 0;
         
 #ifdef DEBUG
         printf("Fifo in path : %s\n", fifoPath);
 #endif
-        
+        int makeFifo = -1;
+        // Check fifo in channel existance
         if ((fifo = fopen(fifoPath, "r")))
         {
             // Fifo already exists, just read it
             printf("COM received on main channel..\n");
             com_mess * decoded_message = read_message(fifo);
+            
             if (decoded_message->header == HEADER_HI)
             {
-                // Pilot requests to write on new pipe
+                // Pilot requests to CT to write ATIS on his pipe
                 char temp[MAX_PATH];
                 sprintf(temp, "%s/%s", currentDir, decoded_message->message);
 #ifdef DEBUG
@@ -94,16 +86,19 @@ int main(int argc, const char * argv[])
                 FILE * pilotFifo = fopen(temp, "w");
                 com_mess * mess_to_send = encode_message(HEADER_ATIS, atis.content);
                 send_message(mess_to_send, pilotFifo);
-                free_message(mess_to_send);
-                
-                fclose(pilotFifo);
             }
             fclose(fifo);
         }
-        else if(mkfifo(fifoPath, 0666) != 0)
+        // Create a fifo channel to let pilot's talk
+        // Check FIFO existance
+        else if((makeFifo = mkfifo(fifoPath, 0666) != 0))
         {
             printf("Error while creating FIFO file :\ncode : %d\nmessage : %s\n", errno, strerror(errno));
             exit(EXIT_FAILURE);
+        }
+        else if (makeFifo == 0)
+        {
+            creating_fifo = 1;
         }
     }
     exit(EXIT_SUCCESS);

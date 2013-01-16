@@ -1,41 +1,27 @@
 //
-//  main.c
-//  atis
+//  atis.c
 //
-//  Created by Youri Tolstoy on 22/12/12.
-//  Copyright (c) 2012 Youri Tolstoy. All rights reserved.
+//  Created by Youri Tolstoy, Gregory Bishop & Kevin Da Costa on 22/12/12.
 //
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
 #include "shared.h"
-#include <time.h>
-#include <string.h>
-#include <unistd.h>
 
 int main(int argc, const char * argv[])
 {
-    char currentDir[MAX_PATH];
-    getcwd(currentDir, MAX_PATH);
-    
-    char atisPath[MAX_PATH];
-    char lockPath[MAX_PATH];
-    
-    sprintf(atisPath, "%s/%s", currentDir, ATIS_NAME);
-    sprintf(lockPath, "%s.lock", atisPath);
+    // Init needed file paths
+    initPaths();
     
     while(1)
     {
         FILE * lockFile = fopen(lockPath, "w");
-        if (!lockFile)
+        if (lockFile == NULL)
         {
             printf("Lock file couldn't be created\n");
             exit(EXIT_FAILURE);
         }
         
         FILE * atisFile = fopen(atisPath,"w+");
-        if (!atisFile)
+        if (atisFile == NULL)
         {
             printf("ATIS file couldn't be opened\n");
             exit(EXIT_FAILURE);
@@ -45,6 +31,7 @@ int main(int argc, const char * argv[])
         int i = 0;
         int j;
         srand((int)(time(NULL)));
+        // Generate a ATIS_LENGTH ATIS message (randomized)
         while (i < ATIS_LENGTH-1)
         {
             j = 0;
@@ -63,6 +50,7 @@ int main(int argc, const char * argv[])
         
         printf("Meteo : \"%s\"\nSize : %zd\n",meteo,strlen(meteo));
         
+        // Write & close ATIS to atis file
         fwrite(meteo, sizeof(char), strlen(meteo), atisFile);
         
         fclose(atisFile);

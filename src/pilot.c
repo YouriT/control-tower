@@ -1,51 +1,35 @@
 //
-//  main.c
-//  pilot
+//  pilot.c
 //
-//  Created by Youri Tolstoy on 22/12/12.
-//  Copyright (c) 2012 Youri Tolstoy. All rights reserved.
+//  Created by Youri Tolstoy, Gregory Bishop & Kevin Da Costa on 4/12/12.
 //
 
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <sys/stat.h>
 #include "shared.h"
-#include <errno.h>
-#include <string.h>
-#include <sys/time.h>
 
 int main(int argc, const char * argv[])
 {
+    // Create a unique pilot name base on system timestamp
     struct timeval time;
     gettimeofday(&time, NULL);
-    unsigned long long microsec = ((unsigned long long)time.tv_sec);
+    long microsec = time.tv_sec;
     char pilotName[250];
-    sprintf(pilotName, "%lld", microsec);
+    sprintf(pilotName, "%ld", microsec);
     
-    // Make pilot fifo
-    char currentDir[MAX_PATH];
-    getcwd(currentDir, MAX_PATH);
-    
-    char ctFifoInPath[MAX_PATH];
-    char pilotFifoPath[MAX_PATH];
-    
-    sprintf(ctFifoInPath, "%s/%s", currentDir, FIFO_IN_NAME);
+    // Init needed directories
+    initPaths();
     sprintf(pilotFifoPath, "%s/%s", currentDir, pilotName);
     
+    // Create pilot private fifo
     mkfifo(pilotFifoPath, 0666);
     
-    // Talk to control-tower
+    // Write ATIS request to fifo-in
     printf(" - Waiting for signal -\n\n");
     FILE * ctFifoFd;
-    if ((ctFifoFd = fopen(ctFifoInPath, "w")))
+    if ((ctFifoFd = fopen(fifoPath, "w")) != NULL)
     {
         printf("Roger, here is DC%s.\nPlease provide ATIS. Over.\n", pilotName);
         com_mess * mess2send = encode_message(HEADER_HI, pilotName);
         send_message(mess2send, ctFifoFd);
-        free_message(mess2send);
-        fclose(ctFifoFd);
     }
     else
     {
@@ -53,45 +37,36 @@ int main(int argc, const char * argv[])
         exit(EXIT_FAILURE);
     }
     
-    
     printf("Waiting for ATIS..\n");
     // Listen on pilot fifo
     while (1)
     {
         FILE * pilotFifoFd;
-        if ((pilotFifoFd = fopen(pilotFifoPath, "r")))
+        if ((pilotFifoFd = fopen(pilotFifoPath, "r")) != NULL)
         {
-            // Fifo already exists, just read it
+#ifdef DEBUG
             printf("Opened !\n");
+#endif
             com_mess * ct_mess = read_message(pilotFifoFd);
+            // ATIS message correctly received
             if (ct_mess->header == HEADER_ATIS && ct_mess->size == strlen(ct_mess->message))
             {
                 printf("ATIS OK, DC%s taking off ! Over.\n", pilotName);
+                free_message(ct_mess);
                 fclose(pilotFifoFd);
                 unlink(pilotFifoPath);
-                //                fclose(ctFifoFd);
-                free_message(ct_mess);
                 break;
             }
             
-            //            if (ct_mess != NULL)
-            //                free(ct_mess);
-            
-            if ((ctFifoFd = fopen(ctFifoInPath, "w")))
+            // ATIS message not correctly received, rerequest ATIS
+            if ((ctFifoFd = fopen(fifoPath, "w")) != NULL)
             {
                 printf("ATIS KO, please send again !\n");
                 com_mess * mess2resend = encode_message(HEADER_HI, pilotName);
                 send_message(mess2resend, ctFifoFd);
-                free_message(mess2resend);
-                //                fclose(ctFifoFd);
             }
-            
-            //            if (pilotFifoFd != NULL)
-            //                fclose(pilotFifoFd);
         }
     }
-    //    if (ctFifoFd != NULL)
-    //        fclose(ctFifoFd);
     
     exit(EXIT_SUCCESS);
 }
