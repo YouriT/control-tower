@@ -44,7 +44,7 @@ int main(int argc, const char * argv[])
         printf("Roger, here is DC%s.\nPlease provide ATIS. Over.\n", pilotName);
         com_mess * mess2send = encode_message(HEADER_HI, pilotName);
         send_message(mess2send, ctFifoFd);
-        free(mess2send);
+        free_message(mess2send);
         fclose(ctFifoFd);
     }
     else
